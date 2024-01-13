@@ -1,2 +1,1 @@
-# AugmentedCane_Supplement
-Supplementary files
+Supplementary files for [AugmentedCane](https://github.com/rl27/AugmentedCane)
