@@ -21,9 +21,10 @@ def hello_world():
     date = curtime.split()[0]
     time = curtime.split()[1].split(':')
 
-    filename = "{0}_{1}-{2}-{3}.json".format(date[5:], time[0], time[1], time[2][:2])
+    data = request.get_json()
+    filename = "{0}_{1}-{2}-{3}_{4}.json".format(date, time[0], time[1], time[2][:2], data['seed'])
     with open(filename, 'w') as f:
-        json.dump(request.get_json(), f)
+        json.dump(data, f)
 
     return 'Hello'
 
@@ -69,7 +70,7 @@ def retrieve():
                     count = len(data['inputs'])
                 response['inputs'] = data['inputs'][:count]
                 response['outputs'] = data['outputs'][:count]
-                response['seeds'] = data['seeds'][:count]
+                response['seed'] = data['seed']
         elif 'params' in command:
             response['prms'] = command['params']
         return response
@@ -78,23 +79,24 @@ def retrieve():
 @app.route('/append', methods=['POST'])
 def append():
     newData = request.get_json()
-    if not os.path.exists('data.json'):
-        with open('data.json', 'w+') as f:
+    filename = "{0}.json".format(newData['seed'])
+    if not os.path.exists(filename):
+        with open(filename, 'w+') as f:
             data = {}
             data['inputs'] = [newData['inputs']]
             data['outputs'] = [newData['outputs']]
             data['means'] = [newData['means']]
             data['sigmas'] = [newData['sigmas']]
-            data['seeds'] = [newData['seeds']]
+            data['seed'] = newData['seed']
             json.dump(data, f)
     else:
-        with open('data.json', 'r+') as f:
+        with open(filename, 'r+') as f:
             data = json.load(f)
             data['inputs'].append(newData['inputs'])
             data['outputs'].append(newData['outputs'])
             data['means'].append(newData['means'])
             data['sigmas'].append(newData['sigmas'])
-            data['seeds'].append(newData['seeds'])
+            data['seed'] = newData['seed']
             f.seek(0)
             json.dump(data, f)
     return 'Hello'
