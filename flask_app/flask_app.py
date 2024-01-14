@@ -69,6 +69,7 @@ def retrieve():
                     count = len(data['inputs'])
                 response['inputs'] = data['inputs'][:count]
                 response['outputs'] = data['outputs'][:count]
+                response['seeds'] = data['seeds'][:count]
         elif 'params' in command:
             response['prms'] = command['params']
         return response
