@@ -25,6 +25,6 @@ Currently there is a button on the app that says "Reset CMA" that will reset the
 
 Replace `[X]` with the name of a `.json` file containing CMA data. This could be `data` for `data.json` or a timestamp like the one in `11-28_22-49-33.json`. Replace `[Y]` with an integer representing the number of CMA iterations.
 * For example, if you previously did 64 runs/iterations and wish to set the system to its state after the 32nd iteration, enter `[]/submit?file=data&count=32`.
-* If you want to get it to its state at the latest iteration, do `[]/submit?file=data&count=64`. You can replace 64 with any value larger than 64, such as 99999, for the same effect.
+* If you want to get it to its state at the latest iteration, do `[]/submit?file=data&count=64`.
 
 Be careful when using `data.json`, as it's mainly there as a backup to ensure we always have the data available in case something goes wrong. If you forget to empty it before starting a new experiment then `data.json` will not necessarily represent the data from your new experiment.

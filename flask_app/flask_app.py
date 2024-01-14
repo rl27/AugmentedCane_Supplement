@@ -15,7 +15,7 @@ app = Flask(__name__)
 def hello():
     return "Hello"
 
-@app.route('/', methods=['POST'])
+@app.route('/all', methods=['POST'])
 def hello_world():
     curtime = str(datetime.datetime.now())
     date = curtime.split()[0]
@@ -84,6 +84,7 @@ def append():
             data['outputs'] = [newData['outputs']]
             data['means'] = [newData['means']]
             data['sigmas'] = [newData['sigmas']]
+            data['seeds'] = [newData['seeds']]
             json.dump(data, f)
     else:
         with open('data.json', 'r+') as f:
@@ -92,6 +93,7 @@ def append():
             data['outputs'].append(newData['outputs'])
             data['means'].append(newData['means'])
             data['sigmas'].append(newData['sigmas'])
+            data['seeds'].append(newData['seeds'])
             f.seek(0)
             json.dump(data, f)
     return 'Hello'
