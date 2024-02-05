@@ -16,7 +16,7 @@ def hello():
     return "Hello"
 
 @app.route('/all', methods=['POST'])
-def hello_world():
+def savetojson():
     curtime = str(datetime.datetime.now())
     date = curtime.split()[0]
     time = curtime.split()[1].split(':')
