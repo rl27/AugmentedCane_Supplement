@@ -2,6 +2,7 @@
 # http://raymondl.pythonanywhere.com/submit?sample=9.32
 # http://raymondl.pythonanywhere.com/submit?file=11-28_22-49-33&count=7
 # http://raymondl.pythonanywhere.com/submit?params=3.5,2.5,1.5,0.5
+# http://raymondl.pythonanywhere.com/submit?trial=0
 # http://raymondl.pythonanywhere.com/retrieve
 
 from flask import Flask, request
@@ -34,6 +35,7 @@ def submit():
     file = request.args.get('file')
     count = request.args.get('count')
     params = request.args.get('params')
+    trial = request.args.get('trial')
     command = {}
     if sample is not None:
         command = {'sample': sample}
@@ -41,6 +43,8 @@ def submit():
         command = {'file': file, 'count': count}
     elif params is not None:
         command = {'params': params.split(',')}
+    elif trial is not None:
+        command = {'trial': trial}
 
     with open('command.json', 'w') as f:
         json.dump(command, f)
@@ -73,6 +77,8 @@ def retrieve():
                 response['seed'] = data['seed']
         elif 'params' in command:
             response['prms'] = command['params']
+        elif 'trial' in command:
+            response['trial'] = command['trial']
         return response
     return {}
 

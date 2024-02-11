@@ -32,3 +32,7 @@ Currently there is a button on the app that says "Reset CMA" that will reset the
 Replace `[X]` with the name of a `.json` file containing CMA data. This could be `1504720458` for `1504720458.json` or `2024-01-14_17-03-08_1504720458` for `2024-01-14_17-03-08_1504720458.json`. Replace `[Y]` with an integer representing the number of CMA iterations.
 * For example, if you previously did 64 runs/iterations and wish to set the system to its state after the 32nd iteration, enter `[]/submit?file=2024-01-14_17-03-08_1504720458&count=32`.
 * If you want to get it to its state at the latest iteration, do `[]/submit?file=2024-01-14_17-03-08_1504720458&count=64`.
+
+---
+
+To run a trial for the heading error experiment, do `[]/submit?trial=0`. The value of the number doesn't matter.
