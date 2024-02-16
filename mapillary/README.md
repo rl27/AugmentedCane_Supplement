@@ -21,6 +21,8 @@ Then add a division layer after that with the following values and type:
 [[[[0.2646]]
   [[0.2754]]
   [[0.3035]]]]
+```
+```
 float32[1,3,1,1]
 ```
 So if the original model starts with `input -> conv`, the modified version will be `input -> sub -> div -> conv`.
