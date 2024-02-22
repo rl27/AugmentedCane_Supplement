@@ -1,0 +1,70 @@
+_base_: '../_base_/mapillary.yml'
+
+batch_size: 4
+iters: 225000
+
+train_dataset:
+  transforms:
+    - type: ResizeStepScaling
+      min_scale_factor: 0.5
+      max_scale_factor: 1.0
+      scale_step_size: 0.1
+    - type: RandomPaddingCrop
+      crop_size: [1200, 1200]
+    - type: RandomHorizontalFlip
+    - type: RandomDistort
+      brightness_range: 0.4
+      contrast_range: 0.4
+      saturation_range: 0.4
+    - type: Normalize
+      mean: [0.4217, 0.4606, 0.4720]
+      std: [0.2646, 0.2754, 0.3035]
+  mode: training
+
+val_dataset:
+  type: Mapillary
+  dataset_root: data/mapillary
+  transforms:
+    - type: Normalize
+      mean: [0.4217, 0.4606, 0.4720]
+      std: [0.2646, 0.2754, 0.3035]
+  mode: validation
+
+optimizer:
+  _inherited_: False
+  type: AdamW
+  weight_decay: 0.01
+  custom_cfg:
+  - name: pos_embed
+    weight_decay_mult: 0.0
+  - name: head
+    lr_multi: 10.0
+  - name: bn
+    weight_decay_mult: 0.0
+
+lr_scheduler:
+  type: PolynomialDecay
+  learning_rate: 0.0006
+  end_lr: 0
+  power: 1.0
+  warmup_iters: 1500
+  warmup_start_lr: 1.0e-6
+
+loss:
+  types:
+    - type: MixedLoss
+      losses:
+        - type: CrossEntropyLoss
+        - type: LovaszSoftmaxLoss
+      coef: [0.8, 0.2]
+  coef: [1]
+
+model:
+  type: PPMobileSeg
+  num_classes: 9
+  backbone:
+    type: MobileSeg_Tiny
+    inj_type: AAM
+    out_feat_chs: [32, 64, 128]
+    pretrained: https://bj.bcebos.com/paddleseg/dygraph/ade20k/pp_mobileseg_tiny_pretrain/model.pdparams
+  upsample: intepolate

@@ -4,6 +4,30 @@
 
 I used these converted labels and dataset statistics to train a model using PaddleSeg.
 
+For training:
+
+`mapillary.py` should be placed in `paddleseg/datasets`. Then modify `paddleseg/datasets/__init__.py` by adding `from .mapillary import Mapillary` to the end of the file.
+
+`pp_mobileseg_tiny_mapillary.yml` is a sample training config.
+
+Training command:
+
+`python tools/train.py --config configs/pp_mobileseg/pp_mobileseg_tiny_mapillary.yml`
+
+Validation command (assuming the number of iterations is 225000):
+
+`python tools/val.py --config configs/pp_mobileseg/pp_mobileseg_tiny_mapillary.yml --model_path output/iter_225000/model.pdparams`
+
+Exporting (assuming 225000 iters and an intended model input shape of 480x480):
+
+`python tools/export.py --config configs/pp_mobileseg/pp_mobileseg_tiny_mapillary.yml --model_path output/iter_225000/model.pdparams --input_shape 1 3 480 480`
+
+Converting to onnx format:
+
+`paddle2onnx --model_dir path_to_PaddleSeg_repository --model_filename output/inference_model/model.pdmodel --params_filename output/inference_model/model.pdiparams --save_file output/model.onnx --enable_dev_version True --opset_version 15`
+
+***
+
 After training, I convert the model to .onnx. This model doesn't have the mean/std normalization, so I manually add two layers to do this using [onnx-modifier](https://github.com/ZhangGe6/onnx-modifier).
 
 Immediately after the input, add a subtraction layer with the following values:
@@ -25,4 +49,4 @@ Then add a division layer after that with the following values and type:
 ```
 float32[1,3,1,1]
 ```
-So if the original model starts with `input -> conv`, the modified version will be `input -> sub -> div -> conv`.
+So if the original model begins with `input -> conv`, the modified version will be `input -> sub -> div -> conv`.
