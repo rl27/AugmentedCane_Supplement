@@ -5,17 +5,15 @@ iters: 225000
 
 train_dataset:
   transforms:
-    - type: ResizeStepScaling
-      min_scale_factor: 0.5
-      max_scale_factor: 1.0
-      scale_step_size: 0.1
+    - type: ResizeByShort
+      short_size: 480
     - type: RandomPaddingCrop
-      crop_size: [1200, 1200]
+      crop_size: [480, 480]
     - type: RandomHorizontalFlip
     - type: RandomDistort
-      brightness_range: 0.4
-      contrast_range: 0.4
-      saturation_range: 0.4
+      brightness_range: 0.5
+      contrast_range: 0.5
+      saturation_range: 0.5
     - type: Normalize
       mean: [0.4217, 0.4606, 0.4720]
       std: [0.2646, 0.2754, 0.3035]
