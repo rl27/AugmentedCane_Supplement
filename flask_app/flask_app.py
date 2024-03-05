@@ -23,7 +23,11 @@ def savetojson():
     time = curtime.split()[1].split(':')
 
     data = request.get_json()
-    filename = "{0}_{1}-{2}-{3}_{4}.json".format(date, time[0], time[1], time[2][:2], data['seed'])
+    if 'name' in data:
+        name = data['name']
+    else:
+        name = 'NoName'
+    filename = "{0}_{1}-{2}-{3}_{4}.json".format(date, time[0], time[1], time[2][:2], name)
     with open(filename, 'w') as f:
         json.dump(data, f)
 
