@@ -23,11 +23,7 @@ def savetojson():
     time = curtime.split()[1].split(':')
 
     data = request.get_json()
-    if 'name' in data:
-        name = data['name']
-    else:
-        name = 'NoName'
-    filename = "{0}_{1}-{2}-{3}_{4}.json".format(date, time[0], time[1], time[2][:2], name)
+    filename = "{0}_{1}-{2}-{3}_{4}.json".format(date, time[0], time[1], time[2][:2], data['filename'])
     with open(filename, 'w') as f:
         json.dump(data, f)
 
@@ -89,7 +85,7 @@ def retrieve():
 @app.route('/append', methods=['POST'])
 def append():
     newData = request.get_json()
-    filename = "{0}.json".format(newData['seed'])
+    filename = "{0}.json".format(newData['filename'])
     if not os.path.exists(filename):
         with open(filename, 'w+') as f:
             data = {}
@@ -98,6 +94,7 @@ def append():
             data['means'] = [newData['means']]
             data['sigmas'] = [newData['sigmas']]
             data['seed'] = newData['seed']
+            data['filename'] = newData['filename']
             json.dump(data, f)
     else:
         with open(filename, 'r+') as f:
@@ -107,6 +104,7 @@ def append():
             data['means'].append(newData['means'])
             data['sigmas'].append(newData['sigmas'])
             data['seed'] = newData['seed']
+            data['filename'] = newData['filename']
             f.seek(0)
             json.dump(data, f)
     return 'Hello'
