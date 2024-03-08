@@ -4,7 +4,7 @@ import numpy as np
 
 # https://stackoverflow.com/a/53376979
 
-# Filenames: a.wave, a+.wav, b.wav
+# Filenames: a.wav, a+.wav, b.wav
 original_audio = ['a', 'a+', 'b']
 
 # Pitches to generate
