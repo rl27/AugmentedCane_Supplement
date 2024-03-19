@@ -2,7 +2,7 @@
 # http://raymondl.pythonanywhere.com/submit?sample=9.32
 # http://raymondl.pythonanywhere.com/submit?file=11-28_22-49-33&count=7
 # http://raymondl.pythonanywhere.com/submit?params=3.5,2.5,1.5,0.5
-# http://raymondl.pythonanywhere.com/submit?trial=0
+# http://raymondl.pythonanywhere.com/submit?trial=1
 # http://raymondl.pythonanywhere.com/retrieve
 
 from flask import Flask, request
