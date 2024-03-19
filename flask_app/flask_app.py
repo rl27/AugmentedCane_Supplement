@@ -1,8 +1,11 @@
 
 # http://raymondl.pythonanywhere.com/submit?sample=9.32
-# http://raymondl.pythonanywhere.com/submit?file=11-28_22-49-33&count=7
-# http://raymondl.pythonanywhere.com/submit?params=3.5,2.5,1.5,0.5
+# http://raymondl.pythonanywhere.com/submit?file=CMA_1854167606&count=7
+# http://raymondl.pythonanywhere.com/submit?params=4.5,0.2,1.5
 # http://raymondl.pythonanywhere.com/submit?trial=1
+# http://raymondl.pythonanywhere.com/submit?presets=1,1,1,3,0.5,0.5,7,0.2,3     <-- this will use the given values
+# http://raymondl.pythonanywhere.com/submit?presets=0                           <-- this will use the upper and lower bounds defined in TestModule.cs
+
 # http://raymondl.pythonanywhere.com/retrieve
 
 from flask import Flask, request
@@ -36,6 +39,7 @@ def submit():
     count = request.args.get('count')
     params = request.args.get('params')
     trial = request.args.get('trial')
+    presets = request.args.get('presets')
     command = {}
     if sample is not None:
         command = {'sample': sample}
@@ -45,6 +49,8 @@ def submit():
         command = {'params': params.split(',')}
     elif trial is not None:
         command = {'trial': trial}
+    elif presets is not None:
+        command = {'presets': presets.split(',')}
 
     with open('command.json', 'w') as f:
         json.dump(command, f)
@@ -79,6 +85,8 @@ def retrieve():
             response['prms'] = command['params']
         elif 'trial' in command:
             response['trial'] = command['trial']
+        elif 'presets' in command:
+            response['presets'] = command['presets']
         return response
     return {}
 
