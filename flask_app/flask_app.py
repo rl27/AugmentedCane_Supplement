@@ -6,6 +6,9 @@
 # http://raymondl.pythonanywhere.com/submit?presets=1,1,1,3,0.5,0.5,7,0.2,3     <-- this will use the given values
 # http://raymondl.pythonanywhere.com/submit?presets=0                           <-- this will use the upper and lower bounds defined in TestModule.cs
 
+# This is essentially just a combination of trial and presets.
+# http://raymondl.pythonanywhere.com/submit?train=5&test=1,1,1,3,4,5
+
 # http://raymondl.pythonanywhere.com/retrieve
 
 from flask import Flask, request
@@ -40,6 +43,8 @@ def submit():
     params = request.args.get('params')
     trial = request.args.get('trial')
     presets = request.args.get('presets')
+    train = request.args.get('train')
+    test = request.args.get('test')
     command = {}
     if sample is not None:
         command = {'sample': sample}
@@ -51,6 +56,8 @@ def submit():
         command = {'trial': trial}
     elif presets is not None:
         command = {'presets': presets.split(',')}
+    elif train is not None and test is not None:
+        command = {'train': train, 'test': test.split(',')}
 
     with open('command.json', 'w') as f:
         json.dump(command, f)
@@ -87,6 +94,10 @@ def retrieve():
             response['trial'] = command['trial']
         elif 'presets' in command:
             response['presets'] = command['presets']
+        elif 'train' in command and 'test' in command:
+            response['train'] = command['train']
+            response['test'] = command['test']
+
         return response
     return {}
 
