@@ -1,20 +1,35 @@
+'''
+Set parameters:
+http://raymondl.pythonanywhere.com/submit?parameters=[4.5,0.2,1.5]
 
-# http://raymondl.pythonanywhere.com/submit?sample=9.32
-# http://raymondl.pythonanywhere.com/submit?file=CMA_1854167606&count=7
-# http://raymondl.pythonanywhere.com/submit?params=4.5,0.2,1.5
-# http://raymondl.pythonanywhere.com/submit?trial=1
-# http://raymondl.pythonanywhere.com/submit?presets=1,1,1,3,0.5,0.5,7,0.2,3     <-- this will use the given values
-# http://raymondl.pythonanywhere.com/submit?presets=0                           <-- this will use the upper and lower bounds defined in TestModule.cs
+Run 1 trial:
+http://raymondl.pythonanywhere.com/submit?trial=1
 
-# This is essentially just a combination of trial and presets.
-# http://raymondl.pythonanywhere.com/submit?train=5&test=1,1,1,3,4,5
+Run trials in randomized order using specific parameters, without affecting the state of the CMA system
+raymondl.pythonanywhere.com/submit?presets=[[1,1,1],[3,0.5,0.5],[7,0.2,3]]     <-- this will use the given values
+raymondl.pythonanywhere.com/submit?presets=[]                                  <-- this will use the upper and lower bounds defined in TestModule.cs
 
-# http://raymondl.pythonanywhere.com/retrieve
+Manually input a CMA sample:
+http://raymondl.pythonanywhere.com/submit?sample=9.32
+
+Load CMA state from file:
+http://raymondl.pythonanywhere.com/submit?file=CMA_1854167606&count=7
+
+{
+    "commands": [
+        {"trial": 10},
+        {"presets": [[4.5,0.3,1.5]]},
+        {"presets": [[1,0.1,1],[5,0.5,0.5]], "headings": [[40,50,70],[30,60,90]]},
+        {"parameters": [4.5,0.2,1.5]}
+    ]
+}
+'''
 
 from flask import Flask, request
 import json
 import datetime
 import os
+import ast
 
 app = Flask(__name__)
 
@@ -40,24 +55,23 @@ def submit():
     sample = request.args.get('sample')
     file = request.args.get('file')
     count = request.args.get('count')
-    params = request.args.get('params')
+    parameters = request.args.get('parameters')
     trial = request.args.get('trial')
     presets = request.args.get('presets')
-    train = request.args.get('train')
-    test = request.args.get('test')
+    headings = request.args.get('headings')
     command = {}
     if sample is not None:
         command = {'sample': sample}
     elif file is not None and count is not None:
         command = {'file': file, 'count': count}
-    elif params is not None:
-        command = {'params': params.split(',')}
+    elif parameters is not None:
+        command = {'parameters': ast.literal_eval(parameters)}
     elif trial is not None:
         command = {'trial': trial}
     elif presets is not None:
-        command = {'presets': presets.split(',')}
-    elif train is not None and test is not None:
-        command = {'train': train, 'test': test.split(',')}
+        command = {'presets': ast.literal_eval(presets)}
+        if headings is not None:
+            command['headings'] = ast.literal_eval(headings)
 
     with open('command.json', 'w') as f:
         json.dump(command, f)
@@ -72,10 +86,8 @@ def retrieve():
         json.dump({}, f)
         f.truncate()
     if command != {}:
-        response = {}
-        if 'sample' in command:
-            response['sample'] = command['sample']
-        elif 'file' in command and 'count' in command:
+        if 'file' in command and 'count' in command:
+            response = {}
             file = command['file'] + '.json'
             count = command['count']
             if os.path.exists(file):
@@ -88,17 +100,8 @@ def retrieve():
                 response['inputs'] = data['inputs'][:count]
                 response['outputs'] = data['outputs'][:count]
                 response['seed'] = data['seed']
-        elif 'params' in command:
-            response['prms'] = command['params']
-        elif 'trial' in command:
-            response['trial'] = command['trial']
-        elif 'presets' in command:
-            response['presets'] = command['presets']
-        elif 'train' in command and 'test' in command:
-            response['train'] = command['train']
-            response['test'] = command['test']
-
-        return response
+            return response
+        return command
     return {}
 
 @app.route('/append', methods=['POST'])
