@@ -20,6 +20,7 @@ http://raymondl.pythonanywhere.com/submit?preferences=0
 
 {
     "commands": [
+        {"tts": "This is a test."},
         {"trial": 10},
         {"presets": [[4.5,0.3,1.5]]},
         {"presets": [[1,0.1,1],[5,0.5,0.5]], "headings": [[40,50,70],[30,60,90]]},
@@ -63,6 +64,7 @@ def submit():
     presets = request.args.get('presets')
     headings = request.args.get('headings')
     preferences = request.args.get('preferences')
+    tts = request.args.get('tts')
     command = {}
     if sample is not None:
         command = {'sample': sample}
@@ -78,6 +80,8 @@ def submit():
             command['headings'] = ast.literal_eval(headings)
     elif preferences is not None:
         command = {'preferences': preferences}
+    elif tts is not None:
+        command = {'tts': tts}
 
     with open('command.json', 'w') as f:
         json.dump(command, f)
