@@ -15,6 +15,9 @@ http://raymondl.pythonanywhere.com/submit?sample=9.32
 Load CMA state from file:
 http://raymondl.pythonanywhere.com/submit?file=CMA_1854167606&count=7
 
+Run preference tests:
+http://raymondl.pythonanywhere.com/submit?preferences=0
+
 {
     "commands": [
         {"trial": 10},
@@ -59,6 +62,7 @@ def submit():
     trial = request.args.get('trial')
     presets = request.args.get('presets')
     headings = request.args.get('headings')
+    preferences = request.args.get('preferences')
     command = {}
     if sample is not None:
         command = {'sample': sample}
@@ -72,6 +76,8 @@ def submit():
         command = {'presets': ast.literal_eval(presets)}
         if headings is not None:
             command['headings'] = ast.literal_eval(headings)
+    elif preferences is not None:
+        command = {'preferences': preferences}
 
     with open('command.json', 'w') as f:
         json.dump(command, f)
@@ -80,6 +86,8 @@ def submit():
 @app.route('/retrieve', methods=['GET'])
 def retrieve():
     command = ''
+    if not os.path.isfile('command.json'):
+        return {}
     with open('command.json', 'r+') as f:
         command = json.load(f)
         f.seek(0)
