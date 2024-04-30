@@ -24,6 +24,7 @@ http://raymondl.pythonanywhere.com/submit?preferences=0
         {"trial": 10},
         {"presets": [[4.5,0.3,1.5]]},
         {"presets": [[1,0.1,1],[5,0.5,0.5]], "headings": [[40,50,70],[30,60,90]]},
+        {"presets": [[1,0.1,1],[5,0.5,0.5]], "headings": [[40,50,70],[30,60,90]], "positive": "True"},
         {"parameters": [4.5,0.2,1.5]}
     ]
 }
@@ -63,6 +64,7 @@ def submit():
     trial = request.args.get('trial')
     presets = request.args.get('presets')
     headings = request.args.get('headings')
+    positive = request.args.get('positive')
     preferences = request.args.get('preferences')
     speak = request.args.get('speak')
     command = {}
@@ -78,6 +80,8 @@ def submit():
         command = {'presets': ast.literal_eval(presets)}
         if headings is not None:
             command['headings'] = ast.literal_eval(headings)
+        if positive is not None:
+            command['positive'] = ast.literal_eval(positive)
     elif preferences is not None:
         command = {'preferences': preferences}
     elif speak is not None:
