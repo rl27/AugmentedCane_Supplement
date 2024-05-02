@@ -33,6 +33,7 @@ http://raymondl.pythonanywhere.com/submit?preferences=0
 from flask import Flask, request
 import json
 import datetime
+import pytz
 import os
 import ast
 
@@ -41,6 +42,17 @@ app = Flask(__name__)
 @app.route('/hello', methods=['GET'])
 def hello():
     return "Hello"
+
+@app.route('/log', methods=['POST'])
+def log():
+    text = request.get_json()['text']
+
+    curtime = str(datetime.datetime.now(pytz.timezone('US/Eastern')))
+    date = curtime.split()[0]
+    time = curtime.split()[1].split(':')
+
+    with open("log.txt", "a") as f:
+        f.write("{0} {1}:{2}:{3} {4}\n".format(date, time[0], time[1], time[2][:2], text))
 
 @app.route('/all', methods=['POST'])
 def savetojson():
