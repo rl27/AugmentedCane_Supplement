@@ -18,9 +18,6 @@ http://raymondl.pythonanywhere.com/submit?file=CMA_1854167606&count=7
 Run preference tests:
 http://raymondl.pythonanywhere.com/submit?preferences=0
 
-Sync GPS coords [latitude,longitude]:
-http://raymondl.pythonanywhere.com/submit?coords=[42.363,-71.126]
-
 {
     "commands": [
         {"speak": "This is a test."},
@@ -30,13 +27,6 @@ http://raymondl.pythonanywhere.com/submit?coords=[42.363,-71.126]
         {"presets": [[1,0.1,1],[5,0.5,0.5]], "headings": [[40,50,70],[30,60,90]], "positive": "True"},
         {"presets": [[1,0.1,1],[5,0.5,0.5]], "headings": [[40,50,70],[30,60,90]], "random": "False", "positive": "True"},
         {"parameters": [4.5,0.2,1.5]}
-    ]
-}
-
-{
-    "commands": [
-        {"coords": [42.36284689769251, -71.12516194422597]},
-        {"trial": 6}
     ]
 }
 '''
@@ -91,7 +81,6 @@ def submit():
     random = request.args.get('random')
     preferences = request.args.get('preferences')
     speak = request.args.get('speak')
-    coords = request.args.get('coords')
     command = {}
     if sample is not None:
         command = {'sample': sample}
@@ -113,8 +102,6 @@ def submit():
         command = {'preferences': preferences}
     elif speak is not None:
         command = {'speak': speak}
-    elif coords is not None:
-        command = {'coords': ast.literal_eval(coords)}
 
     with open('command.json', 'w') as f:
         json.dump(command, f)
