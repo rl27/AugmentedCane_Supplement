@@ -29,6 +29,13 @@ http://raymondl.pythonanywhere.com/submit?preferences=0
         {"parameters": [4.5,0.2,1.5]}
     ]
 }
+
+{
+    "commands": [
+        {"start": [10,11], "points": [[1,2],[3,4],[5,6],[7,8]]},
+        {"trial": 4}
+    ]
+}
 '''
 
 from flask import Flask, request
@@ -81,6 +88,8 @@ def submit():
     random = request.args.get('random')
     preferences = request.args.get('preferences')
     speak = request.args.get('speak')
+    start = request.args.get('start')
+    points = request.args.get('points')
     command = {}
     if sample is not None:
         command = {'sample': sample}
@@ -102,6 +111,8 @@ def submit():
         command = {'preferences': preferences}
     elif speak is not None:
         command = {'speak': speak}
+    elif start is not None and points is not None:
+        command = {'start': ast.literal_eval(start), 'points': ast.literal_eval(points)}
 
     with open('command.json', 'w') as f:
         json.dump(command, f)
