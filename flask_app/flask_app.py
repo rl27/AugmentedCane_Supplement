@@ -32,7 +32,7 @@ http://raymondl.pythonanywhere.com/submit?preferences=0
 
 {
     "commands": [
-        {"start": [42.366824263322044, -71.12252874997468], "points": [[42.36720286730024, -71.12217224557577],[42.36732862054963, -71.12281366306865],[42.36753114181499, -71.12272037496892],[42.36741129516722, -71.12211893666927],[42.36720286730024, -71.12217224557577]]},
+        {"points": [[42.36720286730024, -71.12217224557577],[42.36732862054963, -71.12281366306865],[42.36753114181499, -71.12272037496892],[42.36741129516722, -71.12211893666927],[42.36720286730024, -71.12217224557577]]},
         {"trial": 5}
     ]
 }
@@ -88,7 +88,6 @@ def submit():
     random = request.args.get('random')
     preferences = request.args.get('preferences')
     speak = request.args.get('speak')
-    start = request.args.get('start')
     points = request.args.get('points')
     command = {}
     if sample is not None:
@@ -111,8 +110,8 @@ def submit():
         command = {'preferences': preferences}
     elif speak is not None:
         command = {'speak': speak}
-    elif start is not None and points is not None:
-        command = {'start': ast.literal_eval(start), 'points': ast.literal_eval(points)}
+    elif points is not None:
+        command = {'points': ast.literal_eval(points)}
 
     with open('command.json', 'w') as f:
         json.dump(command, f)
