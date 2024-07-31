@@ -36,6 +36,13 @@ http://raymondl.pythonanywhere.com/submit?preferences=0
         {"trial": 5}
     ]
 }
+
+{
+    "commands": [
+        {"footpath": "False"},
+        {"trial": 300}
+    ]
+}
 '''
 
 from flask import Flask, request
@@ -89,6 +96,7 @@ def submit():
     preferences = request.args.get('preferences')
     speak = request.args.get('speak')
     points = request.args.get('points')
+    footpath = request.args.get('footpath')
     command = {}
     if sample is not None:
         command = {'sample': sample}
@@ -112,6 +120,8 @@ def submit():
         command = {'speak': speak}
     elif points is not None:
         command = {'points': ast.literal_eval(points)}
+    elif footpath is not None:
+        command = {'footpath': ast.literal_eval(footpath)}
 
     with open('command.json', 'w') as f:
         json.dump(command, f)
