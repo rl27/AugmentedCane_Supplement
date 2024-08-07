@@ -31,11 +31,11 @@ http://raymondl.pythonanywhere.com/submit?preferences=0
 }
 
 
-Condition 1 train:
+Condition 1 train (DO THIS TWICE, TOTAL 300 TRIALS):
 {
     "commands": [
         {"footpath": "False"},
-        {"trial": 300}
+        {"trial": 150}
     ]
 }
 
@@ -52,6 +52,7 @@ Condition 1 val (REPLACE A,B,C WITH OPTIMIZED PARAMS):
 Condition 3:
 {
     "commands": [
+        {"parameters": [A,B,C]},
         {"trial": 5}
     ]
 }
@@ -59,6 +60,7 @@ Condition 3:
 Condition 3 reverse:
 {
     "commands": [
+        {"parameters": [A,B,C]},
         {"points": [[42.36720286730024,-71.12217224557577],[42.36732862054963,-71.12281366306865],[42.36753114181499,-71.12272037496892],[42.36741129516722,-71.12211893666927],[42.36720286730024,-71.12217224557577]]},
         {"trial": 5}
     ]
