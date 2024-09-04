@@ -29,42 +29,6 @@ http://raymondl.pythonanywhere.com/submit?preferences=0
         {"parameters": [4.5,0.2,1.5]}
     ]
 }
-
-
-Condition 1 train (DO THIS TWICE, TOTAL 300 TRIALS):
-{
-    "commands": [
-        {"footpath": "False"},
-        {"trial": 150}
-    ]
-}
-
-Condition 1 val (REPLACE A,B,C WITH OPTIMIZED PARAMS):
-{
-    "commands": [
-        {"footpath": "False"},
-        {"presets": [[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[A,B,C],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1],[3,0.5,1]],
-        "headings": [[40],[42],[44],[46],[48],[50],[52],[54],[56],[58],[60],[62],[64],[66],[68],[70],[72],[74],[76],[78],[80],[82],[84],[86],[88],[90],[92],[94],[96],[98],[100],[102],[104],[106],[108],[110],[112],[114],[116],[118],[120],[40],[42],[44],[46],[48],[50],[52],[54],[56],[58],[60],[62],[64],[66],[68],[70],[72],[74],[76],[78],[80],[82],[84],[86],[88],[90],[92],[94],[96],[98],[100],[102],[104],[106],[108],[110],[112],[114],[116],[118],[120]],
-        "random": "True"}
-    ]
-}
-
-Condition 3:
-{
-    "commands": [
-        {"parameters": [A,B,C]},
-        {"trial": 5}
-    ]
-}
-
-Condition 3 reverse:
-{
-    "commands": [
-        {"parameters": [A,B,C]},
-        {"points": [[42.36720286730024,-71.12217224557577],[42.36732862054963,-71.12281366306865],[42.36753114181499,-71.12272037496892],[42.36741129516722,-71.12211893666927],[42.36720286730024,-71.12217224557577]]},
-        {"trial": 5}
-    ]
-}
 '''
 
 from flask import Flask, request
@@ -118,7 +82,7 @@ def submit():
     preferences = request.args.get('preferences')
     speak = request.args.get('speak')
     points = request.args.get('points')
-    footpath = request.args.get('footpath')
+    mode = request.args.get('mode')
     command = {}
     if sample is not None:
         command = {'sample': sample}
@@ -142,8 +106,8 @@ def submit():
         command = {'speak': speak}
     elif points is not None:
         command = {'points': ast.literal_eval(points)}
-    elif footpath is not None:
-        command = {'footpath': ast.literal_eval(footpath)}
+    elif mode is not None:
+        command = {'mode': mode}
 
     with open('command.json', 'w') as f:
         json.dump(command, f)
