@@ -83,6 +83,7 @@ def submit():
     speak = request.args.get('speak')
     points = request.args.get('points')
     mode = request.args.get('mode')
+    obstacles = request.args.get('obstacles')
     command = {}
     if sample is not None:
         command = {'sample': sample}
@@ -108,6 +109,8 @@ def submit():
         command = {'points': ast.literal_eval(points)}
     elif mode is not None:
         command = {'mode': mode}
+    elif obstacles is not None:
+        command = {'obstacles': ast.literal_eval(obstacles)}
 
     with open('command.json', 'w') as f:
         json.dump(command, f)
