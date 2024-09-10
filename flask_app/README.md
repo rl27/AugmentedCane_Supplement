@@ -1,3 +1,5 @@
+## Note: The instructions below are outdated.
+
 `flask_app.py` is a bandaid solution for our need to be able to run CMA-ES personalization experiments using our app without needing to take the phone from the person using it.
 
 A server running `flask_app.py` receives various HTTP requests from the app (which are done automatically) and from another device (which are done manually). In our case, we're running the app on pythonanywhere.

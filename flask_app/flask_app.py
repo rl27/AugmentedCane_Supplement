@@ -68,6 +68,10 @@ def savetojson():
 
     return 'Hello'
 
+###################################################
+# NOTE: I am no longer updating /submit with new variables. I highly recommend manually saving commands to command.json instead.
+###################################################
+
 @app.route('/submit', methods=['GET'])
 def submit():
     sample = request.args.get('sample')
